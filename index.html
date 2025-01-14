@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Socket.IO Sohbet</title>
+  <style>
+    #messages { list-style-type: none; margin: 0; padding: 0; }
+    #messages li { padding: 5px 10px; }
+    /* Mesajların rengini ayarlamak için stil */
+    .message {
+        padding: 5px;
+        margin-bottom: 5px;
+        border-radius: 5px; /* Köşeleri yuvarlak yapar */
+        word-wrap: break-word; /* Uzun kelimeleri kırar */
+    }
+  </style>
+</head>
+<body>
+  <input type="text" id="usernameInput" placeholder="Kullanıcı Adı Girin">
+  <ul id="messages"></ul>
+  <form id="form" action="">
+    <input id="input" autocomplete="off" /><button>Gönder</button>
+  </form>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    const messages = document.getElementById('messages');
+    const form = document.getElementById('form');
+    const input = document.getElementById('input');
+    const usernameInput = document.getElementById('usernameInput');
+    let userColor;
+
+    usernameInput.addEventListener('change', () => {
+        socket.emit('set username', usernameInput.value);
+    });
+
+    socket.on('user info', (userInfo) => {
+        userColor = userInfo.color;
+    });
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+
+    socket.on('chat message', (data) => {
+      const item = document.createElement('li');
+      // Mesajı ve gönderen bilgisini içeren bir div oluştur
+      const messageDiv = document.createElement('div');
+      messageDiv.className = 'message';
+      messageDiv.textContent = data.username + ": " + data.message;
+      messageDiv.style.backgroundColor = data.color; // Mesaj rengini ayarla
+      item.appendChild(messageDiv);
+      messages.appendChild(item);
+    });
+  </script>
+</body>
+</html>
