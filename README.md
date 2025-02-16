@@ -38,7 +38,7 @@ Bu proje, Socket.IO kullanarak gerçek zamanlı bir sohbet uygulaması örneğid
 1.  Sunucuyu başlatın:
 
     ```bash
-    node server.js
+    node server.js &
     ```
 
 2.  Tarayıcınızda `http://localhost:3001` adresini açın.
