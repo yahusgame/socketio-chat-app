@@ -13,10 +13,17 @@ function generateRandomColor() {
   return '#' + crypto.randomBytes(3).toString('hex');
 }
 
+// Anasayfa için route (index.html)
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
+// /chat yolu için yeni bir route ekleyelim
+app.get('/chat', (req, res) => {
+  res.sendFile(__dirname + '/chat.html');  // chat.html dosyasını eklemeniz gerekir
+});
+
+// Socket.io ile bağlantı
 io.on('connection', (socket) => {
   console.log('Bir kullanıcı bağlandı: ' + socket.id);
 
@@ -47,3 +54,4 @@ io.on('connection', (socket) => {
 server.listen(3001, () => {
   console.log('3001 portunda dinleniyor');
 });
+      
